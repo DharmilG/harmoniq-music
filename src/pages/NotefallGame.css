@@ -1,0 +1,73 @@
+/* NotefallGame.css */
+.notefall-container {
+    width: 900px;
+    margin: 0 0 0;
+    background: var(--color-background-secondary);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    justify-content: center;
+}
+.notefall-game-area {
+    position: relative;
+    justify-self: center;
+    height: 240px;
+    width: 555px;
+    background-color: #211829;
+    border: 2px solid var(--color-border);
+    border-bottom: none;
+    overflow: hidden;
+    margin-top: var(--space-md);
+    margin-bottom: 0;
+}
+
+.falling-note {
+    position: absolute;
+    background-color: var(--color-primary);
+    border-radius: var(--radius-sm);
+    transform: translateX(-50%);
+    transition: background-color 0.1s;
+
+    /* --- CHANGE START --- */
+    /* Use flexbox to position labels inside */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* This pushes one label up, one down */
+    align-items: center;
+    padding: 4px 2px; /* Add some vertical and horizontal padding */
+    box-sizing: border-box; /* Ensure padding is included in height */
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 1.2;
+    text-align: center;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Make text more readable */
+    /* --- CHANGE END --- */
+}
+
+.falling-note.hit {
+    background-color: #4ade80 !important;
+    box-shadow: 0 0 10px rgba(74, 222, 128, 0.6);
+}
+
+.notefall-hit-zone {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 20px;
+    background-color: rgba(var(--color-primary-rgb), 0.3);
+    border-top: 2px solid var(--color-primary);
+}
+
+.piano-class{
+    justify-self: center;
+}
+
+/* --- CHANGE START --- */
+/* Removed the old .note-label */
+
+/* Style for the note name (e.g., "C#4") at the top */
+.note-name {
+    width: 100%;
+    font-size: 18px; /* Make note name slightly bigger */
+    font-weight: bolder;
+}

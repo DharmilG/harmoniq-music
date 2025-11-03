@@ -1,0 +1,83 @@
+.piano-container {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.piano {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    height: 200px;
+    background: var(--surface-document);
+    padding: var(--space-lg);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    margin-top: var(--space-xl);
+}
+
+.piano-key {
+    position: relative;
+    border: 1px solid var(--border-color);
+    border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding-bottom: var(--space-sm);
+    user-select: none;
+}
+
+.piano-key.white {
+    width: 60px;
+    height: 100%;
+    background-color: #fff;
+    color: #333;
+    box-shadow: inset 0 -5px 0 #ccc;
+}
+
+.piano-key.white:not(:last-child) {
+    border-right: none;
+}
+
+.piano-key.black {
+    width: 38px;
+    height: 60%;
+    background-color: #333;
+    color: #fff;
+    position: absolute;
+    z-index: 1;
+    margin-left: -19px;
+    box-shadow: inset 0 -4px 0 #000;
+}
+
+.piano-key.black[data-note="C#4"] { left: 49px; }
+.piano-key.black[data-note="D#4"] { left: 109px; }
+.piano-key.black[data-note="F#4"] { left: 229px; }
+.piano-key.black[data-note="G#4"] { left: 289px; }
+.piano-key.black[data-note="A#4"] { left: 349px; }
+.piano-key.black[data-note="C#5"] { left: 469px; }
+.piano-key.black[data-note="D#5"] { left: 529px; }
+
+.piano-key.active {
+    background-color: var(--accent-primary);
+    box-shadow: none;
+    transform: translateY(2px);
+}
+
+.key-label {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.key-char {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.note-name {
+    font-size: 0.8em;
+    color: var(--text-muted);
+}

@@ -1,0 +1,28 @@
+{
+  "name": "music-edu-startup",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@react-oauth/google": "^0.12.2",
+<<<<<<< HEAD
+    "axios": "^1.13.1",
+    "idb": "^8.0.3",
+=======
+>>>>>>> 290fa6ca4b404c4517359c72053dc28160a053b4
+    "react": "^18.3.1",
+    "react-custom-roulette": "^1.4.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.25.1",
+    "tone": "^15.1.22"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.1",
+    "vite": "^5.4.0"
+  }
+}
