@@ -17,22 +17,15 @@ export function AuthProvider({ children }){
     setTimeout(() => setToast(null), 3000)
   }, [])
 
-<<<<<<< HEAD
   const refreshUser = useCallback(async () => {
     try {
-      const { user: sessionUser } = await api('/api/auth/me');
-      setUser(sessionUser);
+      const { user: updatedUser } = await api('/api/auth/me');
+      setUser(updatedUser);
     } catch (error) {
-      // No user session, which is normal.
-      setUser(null);
+      console.error("Failed to refresh user data", error);
     }
   }, []);
 
-  useEffect(() => {
-    setLoading(true);
-    refreshUser().finally(() => setLoading(false));
-  }, [refreshUser]);
-=======
   useEffect(() => {
     const checkUserSession = async () => {
       try {
@@ -48,7 +41,6 @@ export function AuthProvider({ children }){
     };
     checkUserSession();
   }, []);
->>>>>>> 290fa6ca4b404c4517359c72053dc28160a053b4
 
   const logout = useCallback(async () => {
     try {
@@ -80,14 +72,14 @@ export function AuthProvider({ children }){
     if (!email || !password) throw new Error('Please enter valid credentials')
     setLoading(true)
     try {
-      const { user } = await api('/api/auth/login', {
-        method: 'POST', body: { email, password }
+      const response = await api('/api/auth/login', {
+        method: 'POST', body: { email, password },
       })
-      setUser(user)
+      setUser(response.user)
       showToast('Sign in successful!', 'success')
       navigate('/', { replace: true })
       // The token is handled by httpOnly cookie, not exposed to client-side JS
-      return { user }
+      return { user: response.user }
     } finally {
       setLoading(false)
     }
@@ -205,18 +197,11 @@ export function AuthProvider({ children }){
     getGamificationStats,
     verifyResetCode,
     resetPassword,
-<<<<<<< HEAD
-    refreshUser, // Expose the refresh function
     deleteAccount,
     isAuthenticated: !!user,
+    refreshUser, // Expose the new function
     toast,
-  }), [user, loading, login, register, logout, signInWithGoogleCredential, updateProfile, changePassword, forgotPassword, getGamificationStats, verifyResetCode, resetPassword, refreshUser, deleteAccount, toast])
-=======
-    deleteAccount,
-    isAuthenticated: !!user,
-    toast,
-  }), [user, loading, login, register, logout, signInWithGoogleCredential, updateProfile, changePassword, forgotPassword, getGamificationStats, verifyResetCode, resetPassword, deleteAccount, toast])
->>>>>>> 290fa6ca4b404c4517359c72053dc28160a053b4
+  }), [user, loading, login, register, logout, signInWithGoogleCredential, updateProfile, changePassword, forgotPassword, logActivity, getGamificationStats, verifyResetCode, resetPassword, deleteAccount, toast, showToast, refreshUser])
   
   return (
     <AuthContext.Provider value={value}>

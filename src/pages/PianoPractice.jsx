@@ -1,17 +1,3 @@
-<<<<<<< HEAD
-import React from 'react';
-import { useParams } from 'react-router-dom';
-import Piano from '../components/Piano.jsx';
-
-export default function PianoPractice() {
-  const { mode } = useParams();
-
-  return (
-    <section>
-      <Piano mode={mode ?? 'unranked'} showNoteNames />
-    </section>
-  );
-=======
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import * as Tone from 'tone';
 import { useParams } from 'react-router-dom';
@@ -181,5 +167,4 @@ export default function PianoPractice() {
             </div>
         </section>
     );
->>>>>>> 290fa6ca4b404c4517359c72053dc28160a053b4
 }

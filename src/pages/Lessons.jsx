@@ -1,92 +1,101 @@
-import { courses, instructors, instruments } from '../data/lessons.js'
-<<<<<<< HEAD
-import { useState, useEffect, useRef } from 'react'
-import { createPortal } from 'react-dom'
-import LessonBooking from '../components/LessonBooking.jsx'
+import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
+import { courses, instructors, instruments } from '../data/lessons.js';
+import LessonBooking from '../components/LessonBooking.jsx';
 
-export default function Lessons(){
-  const [selectedInstructor, setSelectedInstructor] = useState(null)
-  const [selectedCourse, setSelectedCourse] = useState(null)
-  const modalContentRef = useRef(null)
+export default function Lessons() {
+  const [selectedInstructor, setSelectedInstructor] = useState(null);
+  const [selectedCourse, setSelectedCourse] = useState(null);
+  const modalContentRef = useRef(null);
 
   // Lock body scroll while modal is open and restore on close / unmount
   useEffect(() => {
-    const originalOverflow = document.body.style.overflow
-    const originalPaddingRight = document.body.style.paddingRight
+    const originalOverflow = document.body.style.overflow;
+    const originalPaddingRight = document.body.style.paddingRight;
 
     if (selectedCourse) {
       // Prevent background scrolling
-      document.body.style.overflow = 'hidden'
+      document.body.style.overflow = 'hidden';
 
-      // Optional: prevent layout shift when scrollbar disappears
-      const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth
+      // Prevent layout shift when scrollbar disappears
+      const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
       if (scrollBarWidth > 0) {
-        document.body.style.paddingRight = `${scrollBarWidth}px`
+        document.body.style.paddingRight = `${scrollBarWidth}px`;
       }
 
-      // Ensure modal content starts from its top
+      // Ensure modal content starts from its top and focus it for accessibility
       requestAnimationFrame(() => {
         if (modalContentRef.current) {
-          modalContentRef.current.scrollTop = 0
-          // move focus into modal for accessibility
-          modalContentRef.current.focus()
+          modalContentRef.current.scrollTop = 0;
+          modalContentRef.current.focus();
         }
-      })
+      });
     } else {
       // restore
-      document.body.style.overflow = originalOverflow
-      document.body.style.paddingRight = originalPaddingRight
+      document.body.style.overflow = originalOverflow;
+      document.body.style.paddingRight = originalPaddingRight;
     }
 
     return () => {
       // cleanup if component unmounts while modal is open
-      document.body.style.overflow = originalOverflow
-      document.body.style.paddingRight = originalPaddingRight
-    }
-  }, [selectedCourse])
-=======
-import { useState } from 'react'
-import LessonBooking from '../components/LessonBooking.jsx'
+      document.body.style.overflow = originalOverflow;
+      document.body.style.paddingRight = originalPaddingRight;
+    };
+  }, [selectedCourse]);
 
-// Removed instrument icons for professional appearance
-
-export default function Lessons(){
-  const [selectedInstructor, setSelectedInstructor] = useState(null)
-  const [selectedCourse, setSelectedCourse] = useState(null)
->>>>>>> 290fa6ca4b404c4517359c72053dc28160a053b4
+  // Close on Escape for accessibility
+  useEffect(() => {
+    if (!selectedCourse) return;
+    const onKey = (e) => {
+      if (e.key === 'Escape') setSelectedCourse(null);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [selectedCourse]);
 
   return (
     <section>
       <div style={{ marginBottom: 'var(--space-xl)' }}>
         <h2>Music Lessons</h2>
-        <p className="small">Choose your instrument, find your level, and start your musical journey with expert guidance.</p>
+        <p className="small">
+          Choose your instrument, find your level, and start your musical journey with expert guidance.
+        </p>
       </div>
 
-      <div className="card" style={{
-        margin: 'var(--space-xl) 0',
-        background: 'var(--gradient-glass)',
-        border: '1px solid rgba(139, 92, 246, 0.2)'
-      }}>
+      <div
+        className="card"
+        style={{
+          margin: 'var(--space-xl) 0',
+          background: 'var(--gradient-glass)',
+          border: '1px solid rgba(139, 92, 246, 0.2)'
+        }}
+      >
         <h3>Scheduling & Pricing</h3>
-        <p className="small">Weekly classes with flexible time slots. Choose between group sessions for collaborative learning or private lessons for personalized attention.</p>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: 'var(--space-md)',
-          marginTop: 'var(--space-md)'
-        }}>
-          <div className="tag pill" style={{fontSize: '1rem'}}>Group lessons from $25/session</div>
-          <div className="tag pill" style={{fontSize: '1rem'}}>Private lessons from $45/session</div>
-          <div className="tag pill" style={{fontSize: '1rem'}}>Course bundles from $199</div>
+        <p className="small">
+          Weekly classes with flexible time slots. Choose between group sessions for collaborative learning or private lessons for personalized attention.
+        </p>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: 'var(--space-md)',
+            marginTop: 'var(--space-md)'
+          }}
+        >
+          <div className="tag pill" style={{ fontSize: '1rem' }}>Group lessons from $25/session</div>
+          <div className="tag pill" style={{ fontSize: '1rem' }}>Private lessons from $45/session</div>
+          <div className="tag pill" style={{ fontSize: '1rem' }}>Course bundles from $199</div>
         </div>
       </div>
 
       <h3>Available Courses</h3>
       <ul className="grid">
         {courses.map((c, index) => (
-          <li key={c.id} className="card" style={{
-            animationDelay: `${index * 0.1}s`
-          }}>
+          <li
+            key={c.id}
+            className="card"
+            style={{ animationDelay: `${index * 0.1}s` }}
+          >
             <div className="badge">
               {c.instrument} • {c.level}
             </div>
@@ -94,7 +103,7 @@ export default function Lessons(){
             <p className="small">Duration: {c.duration}</p>
             <div className="price">${c.price}</div>
             <div className="actions">
-              <button 
+              <button
                 className="btn primary"
                 onClick={() => setSelectedCourse(c)}
               >
@@ -106,7 +115,7 @@ export default function Lessons(){
         ))}
       </ul>
 
-      <h3 style={{marginTop: 'var(--space-2xl)'}}>Meet Our Instructors</h3>
+      <h3 style={{ marginTop: 'var(--space-2xl)' }}>Meet Our Instructors</h3>
       <ul className="grid">
         {instructors.map((instructor, index) => (
           <li
@@ -123,38 +132,43 @@ export default function Lessons(){
                 src={instructor.img}
                 alt={instructor.name}
                 className="product-image"
-                style={{ height: '200px' }}
+                style={{ height: '200px', width: '100%', objectFit: 'cover' }}
               />
             </div>
             <h3>{instructor.name}</h3>
-            <div className="badge">
-              {instructor.instrument}
-            </div>
+            <div className="badge">{instructor.instrument}</div>
             <p className="small">{instructor.bio}</p>
+
             {selectedInstructor === instructor.id && (
-              <div style={{
-                marginTop: 'var(--space-md)',
-                padding: 'var(--space-md)',
-                background: 'rgba(139, 92, 246, 0.1)',
-                borderRadius: 'var(--radius-lg)',
-                animation: 'fadeInUp var(--transition-normal) ease-out'
-              }}>
+              <div
+                style={{
+                  marginTop: 'var(--space-md)',
+                  padding: 'var(--space-md)',
+                  background: 'rgba(139, 92, 246, 0.1)',
+                  borderRadius: 'var(--radius-lg)',
+                  animation: 'fadeInUp var(--transition-normal) ease-out'
+                }}
+              >
                 <p className="small">
-                  <strong>Specialties:</strong> Performance technique, music theory, and student engagement.<br/>
-                  <strong>Experience:</strong> 10+ years teaching and performing professionally.<br/>
+                  <strong>Specialties:</strong> Performance technique, music theory, and student engagement.
+                  <br />
+                  <strong>Experience:</strong> 10+ years teaching and performing professionally.
+                  <br />
                   <strong>Teaching Style:</strong> Patient, encouraging, and results-focused.
                 </p>
-                <button 
-                  className="btn primary" 
+                <button
+                  className="btn primary"
                   style={{ marginTop: 'var(--space-sm)' }}
-                  onClick={() => setSelectedCourse({ 
-                    id: 'private-lesson', 
-                    instrument: instructor.instrument, 
-                    level: 'Private', 
-                    duration: '1 hour', 
-                    price: 45, 
-                    summary: `Private ${instructor.instrument} lesson with ${instructor.name}` 
-                  })}
+                  onClick={() =>
+                    setSelectedCourse({
+                      id: `private-${instructor.id}`,
+                      instrument: instructor.instrument,
+                      level: 'Private',
+                      duration: '1 hour',
+                      price: 45,
+                      summary: `Private ${instructor.instrument} lesson with ${instructor.name}`
+                    })
+                  }
                 >
                   Book a Lesson
                 </button>
@@ -164,20 +178,25 @@ export default function Lessons(){
         ))}
       </ul>
 
-      <div className="card" style={{
-        marginTop: 'var(--space-xl)',
-        textAlign: 'center',
-        background: 'var(--gradient-glass)'
-      }}>
+      <div
+        className="card"
+        style={{
+          marginTop: 'var(--space-xl)',
+          textAlign: 'center',
+          background: 'var(--gradient-glass)'
+        }}
+      >
         <h3>Instruments We Teach</h3>
-        <div style={{
-          display: 'flex',
-          justifyContent: 'center',
-          flexWrap: 'wrap',
-          gap: 'var(--space-md)',
-          marginTop: 'var(--space-md)'
-        }}>
-          {instruments.map(instrument => (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            flexWrap: 'wrap',
+            gap: 'var(--space-md)',
+            marginTop: 'var(--space-md)'
+          }}
+        >
+          {instruments.map((instrument) => (
             <div key={instrument} className="tag pill" style={{ fontSize: '1rem' }}>
               {instrument}
             </div>
@@ -188,70 +207,49 @@ export default function Lessons(){
         </p>
       </div>
 
-<<<<<<< HEAD
-      {selectedCourse && createPortal( // <-- 2. WRAP YOUR MODAL
-        <div style={{
-          position: 'fixed',
-          inset: 0,
-          background: 'rgba(0, 0, 0, 0.8)',
-          backdropFilter: 'blur(4px)',
-=======
-      {selectedCourse && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'rgba(0, 0, 0, 0.8)',
->>>>>>> 290fa6ca4b404c4517359c72053dc28160a053b4
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 1000,
-          padding: 'var(--space-lg)'
-<<<<<<< HEAD
-        }} onClick={(e) => {
-          // close when clicking on backdrop
-          if (e.target === e.currentTarget) setSelectedCourse(null)
-        }}>
+      {/* Modal portal for booking */}
+      {selectedCourse &&
+        createPortal(
           <div
-            ref={modalContentRef}
-            role="dialog"
-            aria-modal="true"
-            tabIndex={-1}
+            role="presentation"
             style={{
-              width: 'min(900px, 100%)',
-              maxHeight: '90vh',
-              overflowY: 'scroll',
-              scrollbarWidth: 'none',
-              msOverflowStyle: 'none',
-              background: 'var(--surface-0)',
-              borderRadius: 'var(--radius-lg)',
-              padding: 'var(--space-lg)',
-              boxShadow: 'var(--shadow-xl)',
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'rgba(0, 0, 0, 0.8)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 1000,
+              padding: 'var(--space-lg)'
+            }}
+            onClick={(e) => {
+              // close when clicking on backdrop
+              if (e.target === e.currentTarget) setSelectedCourse(null);
             }}
           >
-            <LessonBooking 
-              course={selectedCourse}
-              onClose={() => setSelectedCourse(null)}
-            />
-          </div>
-        </div>,
-        document.body // <-- 3. ADD THE PORTAL TARGET
-      )}
+            <div
+              ref={modalContentRef}
+              role="dialog"
+              aria-modal="true"
+              tabIndex={-1}
+              style={{
+                width: 'min(900px, 100%)',
+                maxHeight: '90vh',
+                overflowY: 'auto',
+                background: 'var(--surface-0)',
+                borderRadius: 'var(--radius-lg)',
+                padding: 'var(--space-lg)',
+                boxShadow: 'var(--shadow-xl)'
+              }}
+            >
+              <LessonBooking course={selectedCourse} onClose={() => setSelectedCourse(null)} />
+            </div>
+          </div>,
+          document.body
+        )}
     </section>
-  )
+  );
 }
-=======
-        }}>
-          <LessonBooking 
-            course={selectedCourse}
-            onClose={() => setSelectedCourse(null)}
-          />
-        </div>
-      )}
-    </section>
-  )
-}
->>>>>>> 290fa6ca4b404c4517359c72053dc28160a053b4

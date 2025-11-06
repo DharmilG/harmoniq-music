@@ -19,6 +19,7 @@ import ScaleRunnerGame from './pages/ScaleRunnerGame.jsx'
 import ChordBuilderGame from './pages/ChordBuilderGame.jsx'
 import DailyQuiz from './pages/DailyQuiz.jsx'
 import LearnPage from './pages/Learn.jsx'
+import PracticeLog from './pages/PracticeLog.jsx'
 import Store from './pages/Store.jsx'
 import Rewards from './pages/Rewards.jsx'
 import Partnerships from './pages/Partnerships.jsx'
@@ -36,6 +37,7 @@ import { CartProvider } from './context/CartContext.jsx'
 import { AuthProvider } from './context/AuthContext.jsx'
 import Toast from './components/Toast'
 import OrderHistory from './pages/OrderHistory.jsx'
+import LeaderboardPage from './pages/LeaderboardPage.jsx'
 
 export default function App() {
   const location = useLocation()
@@ -65,6 +67,9 @@ export default function App() {
                 <Route path="/learn/practice/piano/unranked" element={<PianoPractice />} />
                 <Route path="/learn/quiz" element={<ProtectedRoute><DailyQuiz /></ProtectedRoute>} />
                 <Route path="/learn" element={<LearnPage />} />
+                <Route path="/learn/practice-log" element={<ProtectedRoute><PracticeLog /></ProtectedRoute>} />
+                <Route path="/leaderboard" element={<LeaderboardPage />} />
+                <Route path="/leaderboard/:gameType" element={<LeaderboardPage />} />
                 <Route path="/rewards" element={<Rewards />} />
                 <Route path="/store" element={<Store />} />
                 <Route path="/partnerships" element={<Partnerships />} />

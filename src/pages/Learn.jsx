@@ -16,6 +16,22 @@ const levels = [
     { name: 'Maestro', points: 300000 },
 ];
 
+function getIcon(name) {
+  const icons = {
+    'Beginner': '🎵',
+    'Novice': '🎸',
+    'Apprentice': '🎹',
+    'Adept': '🥁',
+    'Virtuoso': '🎻',
+    'Expert': '🎺',
+    'Master': '🎼',
+    'Grandmaster': '👑',
+    'Legend': '⭐',
+    'Maestro': '🏆',
+  };
+  return icons[name] || '🎼';
+}
+
 function getLevelInfo(points) {
     let currentLevelIndex = 0;
     for (let i = levels.length - 1; i >= 0; i--) {
@@ -33,6 +49,7 @@ function getLevelInfo(points) {
         nextLevelName: nextLevel ? nextLevel.name : 'Maestro',
         progress: Math.min(100, Math.max(0, progress)),
         pointsToNextLevel: nextLevel ? nextLevel.points - points : 0,
+        currentIndex: currentLevelIndex,
     };
 }
 
@@ -40,6 +57,7 @@ export default function LearnPage() {
     const { user, getGamificationStats, loading } = useAuth();
     const [stats, setStats] = useState({ points: 0, tokens: 0 });
     const [error, setError] = useState('');
+    const [showLevels, setShowLevels] = useState(false);
 
     useEffect(() => {
         if (user) {
@@ -49,7 +67,7 @@ export default function LearnPage() {
         }
     }, [user, getGamificationStats]);
 
-    const { level, progress, pointsToNextLevel, nextLevelName } = getLevelInfo(stats.points);
+    const { level, progress, pointsToNextLevel, nextLevelName, currentIndex } = getLevelInfo(stats.points);
 
     return (
         <section>
@@ -76,7 +94,57 @@ export default function LearnPage() {
                             {pointsToNextLevel > 0 ? `${pointsToNextLevel.toLocaleString()} points to ${nextLevelName}` : 'You are a Maestro!'}
                         </p>
                     </div>
+                    <div style={{ marginTop: 'var(--space-md)' }}>
+                        <button className="btn" onClick={() => setShowLevels(s => !s)} disabled={loading}>
+                            {showLevels ? 'Hide Levels' : 'View All Levels'}
+                        </button>
+                    </div>
                 </div>
+
+                {showLevels && (
+                    <div style={{ marginTop: 'var(--space-lg)', animation: 'fadeInUp 0.3s ease-out' }}>
+                        <h3 style={{ marginBottom: 'var(--space-md)' }}>Level Progression</h3>
+                        <div className="horizontal-slider">
+                            {levels.map((lvl, index) => {
+                                const isUnlocked = stats.points >= lvl.points;
+                                const isCurrent = index === currentIndex;
+                                return (
+                                    <div
+                                        key={index}
+                                        className="card"
+                                        style={{
+                                            flex: '0 0 220px',
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            alignItems: 'center',
+                                            textAlign: 'center',
+                                            gap: 'var(--space-xs)',
+                                            padding: 'var(--space-md)',
+                                            background: isCurrent ? 'rgba(var(--accent-primary-rgb), 0.1)' : 'var(--surface)',
+                                            border: `2px solid ${isCurrent ? 'var(--accent-primary)' : (isUnlocked ? 'var(--surface-elevated)' : 'var(--surface)')}`,
+                                            opacity: isUnlocked ? 1 : 0.5,
+                                            position: 'relative',
+                                        }}
+                                    >
+                                        <div style={{
+                                            position: 'absolute',
+                                            top: '8px',
+                                            right: '8px',
+                                            fontSize: '1.5em',
+                                        }}>
+                                            {isCurrent ? '👑' : (isUnlocked ? '✅' : '🔒')}
+                                        </div>
+                                        <span style={{ fontSize: '2.5em', marginTop: 'var(--space-md)' }}>{getIcon(lvl.name)}</span>
+                                        <strong style={{ marginTop: 'var(--space-sm)' }}>{lvl.name}</strong>
+                                        <p className="small muted" style={{ margin: 0 }}>
+                                            {lvl.points.toLocaleString()} XP
+                                        </p>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                )}
 
                 <div className="card" style={{ marginTop: 'var(--space-lg)' }}>
                     <h3>Activities</h3>
@@ -95,30 +163,37 @@ export default function LearnPage() {
                                 <Link to="/learn/quiz" className="btn" style={{ marginTop: 'auto' }}>Take Quiz</Link>
                             </div>
                         </div>
-<<<<<<< HEAD
-=======
                         <div className="activity-item" style={{ border: '1px solid var(--border-color)', padding: 'var(--space-md)', borderRadius: 'var(--radius-md)' }}>
                             <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
                                 <h4>Log Practice Time</h4>
                                 <p className="small muted" style={{ flexGrow: 1 }}>Keep track of your real-world practice sessions. Earn +5 for every 10 minutes.</p>
-                                <Link to="#" className="btn" style={{ marginTop: 'auto' }}>Log Time</Link>
+                                <Link to="/learn/practice-log" className="btn" style={{ marginTop: 'auto' }}>View Log</Link>
                             </div>
                         </div>
->>>>>>> 290fa6ca4b404c4517359c72053dc28160a053b4
                     </div>
                 </div>
+
+                {/* --- Add styles to hide the scrollbar --- */}
+                <style>{`
+                    .horizontal-slider {
+                        -ms-overflow-style: none;  /* IE and Edge */
+                        scrollbar-width: none;  /* Firefox */
+                    }
+                    .horizontal-slider::-webkit-scrollbar {
+                        display: none; /* Chrome, Safari, and Opera */
+                    }
+                    .horizontal-slider {
+                        /* We can also remove the bottom padding that was making space for the scrollbar */
+                        padding-bottom: 4px;
+                    }
+                `}</style>
 
                 {/* --- START OF FIX --- */}
                 <div className="card" style={{ marginTop: 'var(--space-lg)' }}>
                     <h3>Rewards</h3>
                     <p className="muted">Use your tokens to unlock instruments, tutorials, and enter competitions.</p>
-                    <div style={{ textAlign: 'center', padding: 'var(--space-lg) 0' }}>
-<<<<<<< HEAD
-=======
-                        <p className="muted">Reward Store Coming Soon!</p>
-                        
+                    <div style={{ textAlign: 'center', padding: 'var(--space-lg) 0' }}>                        
                         {/* Flex container to hold the bar and button */}
->>>>>>> 290fa6ca4b404c4517359c72053dc28160a053b4
                         <div style={{ 
                             display: 'flex', 
                             justifyContent: 'center', 
@@ -127,11 +202,8 @@ export default function LearnPage() {
                             marginTop: 'var(--space-md)' 
                         }}>
                             {/* Your original button */}
-<<<<<<< HEAD
                             <Link to="/rewards" className="btn primary">Visit Store</Link>
-=======
-                            <Link to="#" className="btn primary">Visit Store</Link>
->>>>>>> 290fa6ca4b404c4517359c72053dc28160a053b4
+                            <Link to="/leaderboard" className="btn">🏆 Global Leaderboard</Link>
                         </div>
                     </div>
                 </div>

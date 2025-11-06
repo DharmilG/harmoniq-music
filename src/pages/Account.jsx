@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-import React, { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-=======
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
->>>>>>> 290fa6ca4b404c4517359c72053dc28160a053b4
 import { useAuth } from '../context/AuthContext.jsx'
 
 // A selection of cool avatars for users to choose from
@@ -23,67 +18,22 @@ const avatarOptions = [
   'https://api.dicebear.com/8.x/micah/svg?seed=Cleo',
 ]
 
-<<<<<<< HEAD
-// --- UPDATED HELPER COMPONENT: Use user.profile_completed ---
-function ProfileProgressBar({ percentage }) {
-  return (
-    <div style={{ marginTop: 'var(--space-md)' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-xs)' }}>
-        <span className="small">Profile Completion</span>
-        <span className="small" style={{ fontWeight: 'bold' }}>{percentage}%</span>
-      </div>
-      <div style={{
-        height: '8px',
-        background: 'var(--surface-elevated)',
-        borderRadius: 'var(--radius-lg)',
-        overflow: 'hidden'
-      }}>
-        <div style={{
-          width: `${percentage}%`,
-          height: '100%',
-          background: 'var(--success)',
-          transition: 'width 0.3s ease-out'
-        }} />
-      </div>
-    </div>
-  )
-}
-
-// --- UPDATED HELPER COMPONENT: Handle null values ---
-function ProfileDetail({ label, value }) {
-  if (!value) return null
-  return (
-    <div style={{ display: 'grid', gridTemplateColumns: '100px 1fr', gap: 'var(--space-sm)' }}>
-      <span className="small muted">{label}</span>
-      <span className="small">{value}</span>
-    </div>
-  )
-}
-
+// Hardcoded levels based on backend schema (computed on frontend using points)
+const levels = [
+  { level: 1, name: 'Beginner', pointsRequired: 0 },
+  { level: 2, name: 'Novice', pointsRequired: 1000 },
+  { level: 3, name: 'Apprentice', pointsRequired: 2500 },
+  { level: 4, name: 'Adept', pointsRequired: 5000 },
+  { level: 5, name: 'Virtuoso', pointsRequired: 10000 },
+  { level: 6, name: 'Expert', pointsRequired: 20000 },
+  { level: 7, name: 'Master', pointsRequired: 40000 },
+  { level: 8, name: 'Grandmaster', pointsRequired: 80000 },
+  { level: 9, name: 'Legend', pointsRequired: 150000 },
+  { level: 10, name: 'Maestro', pointsRequired: 300000 },
+]
 
 export default function Account(){
-  const { user, logout, updateProfile, changePassword, deleteAccount, loading } = useAuth()
-  const navigate = useNavigate()
-  const [isEditing, setIsEditing] = useState(false)
-  const [showChangePassword, setShowChangePassword] = useState(false)
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
-  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
-  const [error, setError] = useState('')
-
-  // --- UPDATED: Edit profile form state ---
-  const [name, setName] = useState(user?.name || '')
-  const [avatar, setAvatar] = useState(user?.avatar_url || '')
-  const [firstName, setFirstName] = useState(user?.first_name || '')
-  const [lastName, setLastName] = useState(user?.last_name || '')
-  const [phone, setPhone] = useState(user?.phone || '')
-  const [addressLine1, setAddressLine1] = useState(user?.address_line1 || '')
-  const [city, setCity] = useState(user?.city || '')
-  const [zipCode, setZipCode] = useState(user?.zip_code || '')
-  const [country, setCountry] = useState(user?.country || '')
-  // --- END UPDATED STATE ---
-=======
-export default function Account(){
-  const { user, updateProfile, changePassword, deleteAccount, loading } = useAuth()
+  const { user, updateProfile, changePassword, deleteAccount, logout, loading } = useAuth()
   const [isEditing, setIsEditing] = useState(false)
   const [showChangePassword, setShowChangePassword] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
@@ -91,8 +41,14 @@ export default function Account(){
 
   // Edit profile form state
   const [name, setName] = useState(user?.name || '')
+  const [firstName, setFirstName] = useState(user?.first_name || '')
+  const [lastName, setLastName] = useState(user?.last_name || '')
+  const [phone, setPhone] = useState(user?.phone || '')
+  const [addressLine1, setAddressLine1] = useState(user?.address_line1 || '')
+  const [city, setCity] = useState(user?.city || '')
+  const [zipCode, setZipCode] = useState(user?.zip_code || '')
+  const [country, setCountry] = useState(user?.country || '')
   const [avatar, setAvatar] = useState(user?.avatar_url || '')
->>>>>>> 290fa6ca4b404c4517359c72053dc28160a053b4
 
   // Change password form state
   const [currentPassword, setCurrentPassword] = useState('')
@@ -101,28 +57,13 @@ export default function Account(){
   const [passwordError, setPasswordError] = useState('')
   const [passwordSuccess, setPasswordSuccess] = useState('')
 
-<<<<<<< HEAD
-  // keep local form state in sync with backend user whenever user object changes
-useEffect(() => {
-  if (!user) return;
+  // Compute current level based on points
+  const currentLevel = useMemo(() => {
+    return levels.findLast(l => (user?.points || 0) >= l.pointsRequired) || levels[0]
+  }, [user?.points])
 
-  setName(user.name || '');
-  setAvatar(user.avatar_url || '');
-  setFirstName(user.first_name || '');
-  setLastName(user.last_name || '');
-  setPhone(user.phone || '');
-  setAddressLine1(user.address_line1 || '');
-  setCity(user.city || '');
-  setZipCode(user.zip_code || '');
-  setCountry(user.country || '');
-}, [user]);
-
-  // --- REMOVED: Local useMemo calculation -- now use user.profile_completed from backend ---
-
-  // --- UPDATED: Handle Edit ---
   const handleEdit = () => {
     setName(user.name || '')
-    setAvatar(user.avatar_url || '')
     setFirstName(user.first_name || '')
     setLastName(user.last_name || '')
     setPhone(user.phone || '')
@@ -130,48 +71,37 @@ useEffect(() => {
     setCity(user.city || '')
     setZipCode(user.zip_code || '')
     setCountry(user.country || '')
-    
+    setAvatar(user.avatar_url || '')
     setIsEditing(true)
     setError('')
   }
-  // --- END UPDATED HANDLE EDIT ---
-=======
-  const handleEdit = () => {
-    setName(user.name)
-    setAvatar(user.avatar_url)
-    setIsEditing(true)
-    setError('')
-  }
->>>>>>> 290fa6ca4b404c4517359c72053dc28160a053b4
 
   const handleCancel = () => {
     setIsEditing(false)
     setError('')
   }
 
-<<<<<<< HEAD
-  // --- UPDATED: Handle Save ---
   const handleSave = async () => {
     setError('')
     const dataToUpdate = {}
-    
-    // Check all fields for changes
-    if (name !== user.name) dataToUpdate.name = name
+
+    // Handle full name update based on first/last if they are set
+    let fullName = name
+    if (firstName || lastName) {
+      fullName = `${firstName} ${lastName}`.trim()
+      if (!fullName) fullName = name // Fallback to original if both empty
+    }
+    if (fullName !== user.name) dataToUpdate.name = fullName
+
+    // Add other fields if changed
+    if (firstName !== user.first_name) dataToUpdate.first_name = firstName
+    if (lastName !== user.last_name) dataToUpdate.last_name = lastName
+    if (phone !== user.phone) dataToUpdate.phone = phone
+    if (addressLine1 !== user.address_line1) dataToUpdate.address_line1 = addressLine1
+    if (city !== user.city) dataToUpdate.city = city
+    if (zipCode !== user.zip_code) dataToUpdate.zip_code = zipCode
+    if (country !== user.country) dataToUpdate.country = country
     if (avatar !== user.avatar_url) dataToUpdate.avatar_url = avatar
-    if (firstName !== (user.first_name || '')) dataToUpdate.first_name = firstName
-    if (lastName !== (user.last_name || '')) dataToUpdate.last_name = lastName
-    if (phone !== (user.phone || '')) dataToUpdate.phone = phone
-    if (addressLine1 !== (user.address_line1 || '')) dataToUpdate.address_line1 = addressLine1
-    if (city !== (user.city || '')) dataToUpdate.city = city
-    if (zipCode !== (user.zip_code || '')) dataToUpdate.zip_code = zipCode
-    if (country !== (user.country || '')) dataToUpdate.country = country
-=======
-  const handleSave = async () => {
-    setError('')
-    const dataToUpdate = {}
-    if (name !== user.name) dataToUpdate.name = name
-    if (avatar !== user.avatar_url) dataToUpdate.avatar_url = avatar
->>>>>>> 290fa6ca4b404c4517359c72053dc28160a053b4
 
     if (Object.keys(dataToUpdate).length === 0) {
       setIsEditing(false)
@@ -185,10 +115,6 @@ useEffect(() => {
       setError(e.message || 'Failed to update profile.')
     }
   }
-<<<<<<< HEAD
-  // --- END UPDATED HANDLE SAVE ---
-=======
->>>>>>> 290fa6ca4b404c4517359c72053dc28160a053b4
 
   const handleChangePassword = async (e) => {
     e.preventDefault()
@@ -220,18 +146,6 @@ useEffect(() => {
     }
   }
 
-<<<<<<< HEAD
-  const handleLogout = () => {
-    logout()
-    navigate('/')
-  }
-
-  // --- UPDATED: Use backend value, fallback to 0 ---
-  const profileCompletion = user?.profile_completed ?? 0
-  // --- END UPDATED ---
-
-=======
->>>>>>> 290fa6ca4b404c4517359c72053dc28160a053b4
   return (
     <section>
       <div style={{ maxWidth: 720, margin: '0 auto' }}>
@@ -240,22 +154,13 @@ useEffect(() => {
         {error && <div className="alert error">{error}</div>}
 
         <div className="card">
-<<<<<<< HEAD
-          <div style={{ display: 'flex', gap: 'var(--space-lg)', alignItems: 'center', flexWrap: 'wrap', marginBottom: 'var(--space-lg)' }}>
-=======
           <div style={{ display: 'flex', gap: 'var(--space-lg)', alignItems: 'center', flexWrap: 'wrap' }}>
->>>>>>> 290fa6ca4b404c4517359c72053dc28160a053b4
             <img src={isEditing ? avatar : user?.avatar_url} alt="Avatar" style={{ width: 80, height: 80, borderRadius: '50%', objectFit: 'cover', background: 'var(--surface-elevated)' }} />
             <div style={{ flex: 1 }}>
               {isEditing ? (
                 <div className="field">
-<<<<<<< HEAD
-                  <label htmlFor="name">Display Name</label>
-                  <input id="name" type="text" value={name} onChange={e => setName(e.target.value)} disabled={loading} placeholder="e.g. MusicMan99" />
-=======
-                  <label htmlFor="name">Name</label>
+                  <label htmlFor="name">Full Name</label>
                   <input id="name" type="text" value={name} onChange={e => setName(e.target.value)} disabled={loading} />
->>>>>>> 290fa6ca4b404c4517359c72053dc28160a053b4
                 </div>
               ) : (
                 <>
@@ -268,14 +173,35 @@ useEffect(() => {
             {!isEditing && <button className="btn" onClick={handleEdit} disabled={loading}>Edit Profile</button>}
           </div>
 
-<<<<<<< HEAD
-          {/* --- UPDATED: Show completion bar or edit form --- */}
-          {isEditing ? (
-            // EDITING MODE
-            <div style={{ borderTop: '1px solid var(--surface-elevated)', paddingTop: 'var(--space-lg)' }}>
-              <h4>Edit Contact & Address</h4>
-              
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-md)', margin: 'var(--space-md) 0' }}>
+          {/* Profile Progress Bar */}
+          {!isEditing && user && (
+            <div style={{ marginTop: 'var(--space-lg)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-sm)' }}>
+                <span>Profile Completion</span>
+                <span className="small">{user.profile_completed}%</span>
+              </div>
+              <div style={{ 
+                height: 8, 
+                background: 'var(--surface-elevated)', 
+                borderRadius: 4, 
+                overflow: 'hidden' 
+              }}>
+                <div style={{ 
+                  height: '100%', 
+                  width: `${user.profile_completed}%`, 
+                  background: 'var(--accent-primary)', 
+                  transition: 'width 0.3s ease' 
+                }}></div>
+              </div>
+            </div>
+          )}
+
+
+          {isEditing && (
+            <div style={{ marginTop: 'var(--space-lg)' }}>
+              {/* Basic Info */}
+              <h4>Basic Information</h4>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-md)' }}>
                 <div className="field">
                   <label htmlFor="firstName">First Name</label>
                   <input id="firstName" type="text" value={firstName} onChange={e => setFirstName(e.target.value)} disabled={loading} />
@@ -289,88 +215,150 @@ useEffect(() => {
                 <label htmlFor="phone">Phone Number</label>
                 <input id="phone" type="tel" value={phone} onChange={e => setPhone(e.target.value)} disabled={loading} />
               </div>
+
+              {/* Address */}
+              <h4 style={{ marginTop: 'var(--space-xl)' }}>Address</h4>
               <div className="field">
-                <label htmlFor="addressLine1">Address</label>
+                <label htmlFor="addressLine1">Address Line 1</label>
                 <input id="addressLine1" type="text" value={addressLine1} onChange={e => setAddressLine1(e.target.value)} disabled={loading} />
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 'var(--space-md)' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-md)' }}>
                 <div className="field">
                   <label htmlFor="city">City</label>
                   <input id="city" type="text" value={city} onChange={e => setCity(e.target.value)} disabled={loading} />
                 </div>
                 <div className="field">
-                  <label htmlFor="zipCode">Zip / Postal Code</label>
+                  <label htmlFor="zipCode">Zip Code</label>
                   <input id="zipCode" type="text" value={zipCode} onChange={e => setZipCode(e.target.value)} disabled={loading} />
                 </div>
-                <div className="field">
-                  <label htmlFor="country">Country</label>
-                  <input id="country" type="text" value={country} onChange={e => setCountry(e.target.value)} disabled={loading} />
-                </div>
+              </div>
+              <div className="field">
+                <label htmlFor="country">Country</label>
+                <input id="country" type="text" value={country} onChange={e => setCountry(e.target.value)} disabled={loading} />
               </div>
 
-              <div style={{ marginTop: 'var(--space-lg)' }}>
-                <label>Choose Avatar</label>
-                <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(60px, 1fr))', gap: 'var(--space-sm)', marginTop: 'var(--space-sm)' }}>
-                  {avatarOptions.map(url => (
-                    <img key={url} src={url} alt="avatar option" onClick={() => !loading && setAvatar(url)} style={{ width: 60, height: 60, borderRadius: '50%', cursor: loading ? 'default' : 'pointer', border: avatar === url ? '3px solid var(--accent-primary)' : '3px solid transparent', padding: 2, background: 'var(--surface-elevated)' }} />
-                  ))}
-                </div>
-              </div>
-
-=======
-          {isEditing && (
-            <div style={{ marginTop: 'var(--space-lg)' }}>
-              <label>Choose Avatar</label>
+              {/* Avatar Selection */}
+              <h4 style={{ marginTop: 'var(--space-xl)' }}>Avatar</h4>
               <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(60px, 1fr))', gap: 'var(--space-sm)', marginTop: 'var(--space-sm)' }}>
                 {avatarOptions.map(url => (
                   <img key={url} src={url} alt="avatar option" onClick={() => !loading && setAvatar(url)} style={{ width: 60, height: 60, borderRadius: '50%', cursor: loading ? 'default' : 'pointer', border: avatar === url ? '3px solid var(--accent-primary)' : '3px solid transparent', padding: 2, background: 'var(--surface-elevated)' }} />
                 ))}
               </div>
->>>>>>> 290fa6ca4b404c4517359c72053dc28160a053b4
+
               <div className="actions" style={{ justifyContent: 'flex-end', marginTop: 'var(--space-xl)' }}>
                 <button className="btn" onClick={handleCancel} disabled={loading}>Cancel</button>
                 <button className="btn primary" onClick={handleSave} disabled={loading}>{loading ? 'Saving...' : 'Save Changes'}</button>
               </div>
             </div>
-<<<<<<< HEAD
-          ) : (
-            // VIEW MODE
-            <div style={{ borderTop: '1px solid var(--surface-elevated)', paddingTop: 'var(--space-lg)' }}>
-              <ProfileProgressBar percentage={profileCompletion} />
-              
-              <div style={{ marginTop: 'var(--space-lg)', display: 'flex', flexDirection: 'column', gap: 'var(--space-sm)' }}>
-                <ProfileDetail label="Full Name" value={user?.first_name || user?.last_name ? `${user.first_name || ''} ${user.last_name || ''}`.trim() : null} />
-                <ProfileDetail label="Email" value={user?.email} />
-                <ProfileDetail label="Phone" value={user?.phone} />
-                <ProfileDetail label="Address" value={
-                  (user?.address_line1 || user?.city) ? 
-                  `${user.address_line1 || ''}, ${user.city || ''} ${user.zip_code || ''}, ${user.country || ''}`.replace(/ ,/g,',').replace(/, ,/g,',').trim().replace(/^,|,$/g,'')
-                  : null
-                } />
-              </div>
-            </div>
           )}
-          {/* --- END UPDATED SECTION --- */}
         </div>
 
+        {/* --- NEW: User Stats Card --- */}
+        <div className="card" style={{ marginTop: 'var(--space-lg)', padding: 'var(--space-lg)' }}>
+          <h3 style={{ marginBottom: 'var(--space-lg)', textAlign: 'center' }}>Your Stats</h3>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(2, 1fr)",
+              gap: "var(--space-md)",
+              alignItems: "stretch",
+            }}
+          >
+            {/* Level Stat */}
+            <div
+              style={{
+                background: "rgba(59,130,246,0.06)",
+                padding: "var(--space-md)",
+                borderRadius: "10px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                minHeight: 96,
+                border: "1px solid rgba(59,130,246,0.1)",
+              }}
+            >
+              <div style={{ fontSize: 12, color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.5px" }}>Level</div>
+              <div style={{ fontWeight: 700, fontSize: 22, marginTop: 6, color: "rgba(59,130,246,1)" }}>
+                {currentLevel.name}
+              </div>
+              <div style={{ fontSize: 11, color: "var(--muted-foreground)", marginTop: 4 }}>Level {currentLevel.level}</div>
+            </div>
 
-        {/* Order History Card */}
-        <div className="card" style={{ marginTop: 'var(--space-lg)' }}>
-          <h3>Order History</h3>
-          <p className="small muted">View all your past orders and purchase history.</p>
-          <div className="actions" style={{ justifyContent: 'flex-start', marginTop: 'var(--space-md)' }}>
-            <button className="btn primary" onClick={() => navigate('/account/order-history')}>
-              View Order History
-            </button>
+            {/* XP Stat */}
+            <div
+              style={{
+                background: "rgba(74,222,128,0.06)",
+                padding: "var(--space-md)",
+                borderRadius: "10px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                minHeight: 96,
+                border: "1px solid rgba(74,222,128,0.1)",
+              }}
+            >
+              <div style={{ fontSize: 12, color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.5px" }}>Total XP</div>
+              <div style={{ fontWeight: 700, fontSize: 22, marginTop: 6, color: "rgba(74,222,128,1)" }}>
+                {user?.points?.toLocaleString() || 0}
+              </div>
+            </div>
+
+            {/* Tokens Stat */}
+            <div
+              style={{
+                background: "rgba(99,102,241,0.06)",
+                padding: "var(--space-md)",
+                borderRadius: "10px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                minHeight: 96,
+                border: "1px solid rgba(99,102,241,0.1)",
+              }}
+            >
+              <div style={{ fontSize: 12, color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.5px" }}>Tokens</div>
+              <div style={{ fontWeight: 700, fontSize: 22, marginTop: 6, color: "rgba(99,102,241,1)" }}>
+                🎵 {user?.tokens || 0}
+            </div>
+            </div>
+
+            {/* Login Streak Stat */}
+            <div
+              style={{
+                background: "rgba(251,146,60,0.06)",
+                padding: "var(--space-md)",
+                borderRadius: "10px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                minHeight: 96,
+                border: "1px solid rgba(251,146,60,0.1)",
+              }}
+            >
+              <div style={{ fontSize: 12, color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.5px" }}>Login Streak</div>
+              <div style={{ fontWeight: 700, fontSize: 22, marginTop: 6, color: "rgba(251,146,60,1)" }}>
+                🔥 {user?.login_streak || 0}
+            </div>
+            </div>
           </div>
         </div>
 
-        {/* Account Settings Card */}
-=======
-          )}
+        {/* --- NEW: Navigation Links Card --- */}
+        <div className="card" style={{ marginTop: 'var(--space-lg)' }}>
+          <h3>My Activity</h3>
+          <p className="small muted">Review your purchases and learning progress.</p>
+          <div className="actions" style={{ justifyContent: 'flex-start', marginTop: 'var(--space-md)', gap: 'var(--space-sm)' }}>
+            <Link to="/account/order-history" className="btn primary">
+              View Order History
+            </Link>
+            <Link to="/learn/practice-log" className="btn">View Practice Log</Link>
+          </div>
         </div>
 
->>>>>>> 290fa6ca4b404c4517359c72053dc28160a053b4
         <div className="card" style={{ marginTop: 'var(--space-lg)' }}>
           <h3>Account Settings</h3>
           <p className="small muted">Manage your login methods and security settings.</p>
@@ -411,23 +399,17 @@ useEffect(() => {
             </>
           }
           <div className="actions" style={{ marginTop: 'var(--space-lg)' }}>
-<<<<<<< HEAD
-            <button className="btn" onClick={() => setShowLogoutConfirm(true)} disabled={loading}>Logout</button>
-            <button className="btn error" onClick={() => setShowDeleteConfirm(true)} style={{ marginLeft: 'auto' }}>Delete Account</button>
-          </div>
-        </div>
-
-        {/* Modals remain the same */}
-        {showDeleteConfirm && (
-          <div className="modal-overlay" style={{ backdropFilter: 'blur(4px)' }}>
-=======
-            <button className="btn error" onClick={() => setShowDeleteConfirm(true)}>Delete Account</button>
+            <button className="btn" onClick={logout} disabled={loading}>
+              {loading ? 'Logging out...' : 'Logout'}
+            </button>
+            <button className="btn error" onClick={() => setShowDeleteConfirm(true)} disabled={loading}>
+              Delete Account
+            </button>
           </div>
         </div>
 
         {showDeleteConfirm && (
           <div className="modal-overlay">
->>>>>>> 290fa6ca4b404c4517359c72053dc28160a053b4
             <div className="card" style={{ maxWidth: 450, margin: '0 auto', background: 'var(--surface-elevated)' }}>
               <h3>Delete Account</h3>
               <p>Are you sure you want to permanently delete your account? This action cannot be undone.</p>
@@ -443,31 +425,7 @@ useEffect(() => {
             </div>
           </div>
         )}
-<<<<<<< HEAD
-
-        {showLogoutConfirm && (
-          <div className="modal-overlay" style={{ backdropFilter: 'blur(4px)' }}>
-            <div className="card" style={{ maxWidth: 450, margin: '0 auto', background: 'var(--surface-elevated)' }}>
-              <h3>Logout</h3>
-              <p>Are you sure you want to log out?</p>
-              <div className="actions" style={{ justifyContent: 'flex-end', marginTop: 'var(--space-xl)' }}>
-                <button className="btn" onClick={() => setShowLogoutConfirm(false)} disabled={loading}>
-                  Cancel
-                </button>
-                <button className="btn error" onClick={handleLogout} disabled={loading}>
-                  {loading ? 'Logging out...' : 'Yes, Logout'}
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </section>
   )
 }
-=======
-      </div>
-    </section>
-  )
-}
->>>>>>> 290fa6ca4b404c4517359c72053dc28160a053b4

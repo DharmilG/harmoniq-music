@@ -345,4 +345,3 @@ export default function LessonBooking({ course, onClose }) {
     </div>
   )
 }
-

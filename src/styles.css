@@ -1064,6 +1064,32 @@ h3 {
   text-shadow: 0 0 10px rgba(236, 72, 153, 0.25);
 }
 
+/* Add this to your main stylesheet, e.g., index.css */
+.horizontal-slider {
+  display: flex;
+  gap: var(--space-md);
+  overflow-x: auto;
+  padding-bottom: var(--space-md); /* Add some space for the scrollbar */
+  scrollbar-width: thin; /* For Firefox */
+}
+
+/* For Chrome, Safari, and other WebKit browsers */
+.horizontal-slider::-webkit-scrollbar {
+  height: 8px;
+}
+
+.horizontal-slider::-webkit-scrollbar-track {
+  background: var(--surface);
+  border-radius: 4px;
+}
+
+.horizontal-slider::-webkit-scrollbar-thumb {
+  background-color: var(--surface-elevated);
+  border-radius: 4px;
+  border: 2px solid var(--surface);
+}
+
+
 .field input:focus { border-color: rgba(139, 92, 246, 0.6); box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.2); }
 
 .divider { display: flex; align-items: center; gap: 12px; color: var(--text-secondary); margin: var(--space-md) 0; }
@@ -1077,8 +1103,5 @@ h3 {
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   }
 }
-<<<<<<< HEAD
 
 
-=======
->>>>>>> 290fa6ca4b404c4517359c72053dc28160a053b4

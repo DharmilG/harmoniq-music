@@ -177,18 +177,120 @@ function RhythmMasterGameComponent() {
   }
 
   if (gameState === 'finished') {
+    const tokensEarned = Math.floor(score / 100);
+    
     return (
-      <div className="card" style={{ padding: 'var(--space-lg)', textAlign: 'center' }}>
-        <h2>Challenge Complete!</h2>
-        <p>Your score: <strong>{score}</strong></p>
-        {highScore !== null && (
-          <p className="muted">
-            {score > highScore ? `🎉 New High Score! (Previous: ${highScore})` : `High Score: ${highScore}`}
+      <section>
+        <div
+          className="card"
+          style={{
+            maxWidth: 640,
+            margin: "0 auto",
+            textAlign: "center",
+            padding: "var(--space-lg)",
+            display: "flex",
+            flexDirection: "column",
+            gap: "var(--space-lg)",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "var(--space-md)" }}>
+            <h3 style={{ margin: 0 }}>Challenge Complete!</h3>
+          </div>
+
+          {highScore !== null && (
+            <p className="muted" style={{ margin: 0, padding: '0 var(--space-md)' }}>
+              {score > highScore ? `🎉 New High Score! (Previous: ${highScore})` : `High Score: ${highScore}`}
+            </p>
+          )}
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(2, 1fr)",
+              gap: "var(--space-md)",
+              alignItems: "stretch",
+            }}
+          >
+            <div
+              style={{
+                background: "rgba(59,130,246,0.06)",
+                padding: "var(--space-md)",
+                borderRadius: "10px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                minHeight: 96,
+              }}
+            >
+              <div style={{ fontSize: 12, color: "var(--muted-foreground)" }}>Final Score</div>
+              <div style={{ fontWeight: 700, fontSize: 22, marginTop: 6 }}>{Number(score).toLocaleString()}</div>
+            </div>
+
+            <div
+              style={{
+                background: "rgba(74,222,128,0.06)",
+                padding: "var(--space-md)",
+                borderRadius: "10px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                minHeight: 96,
+              }}
+            >
+              <div style={{ fontSize: 12, color: "var(--muted-foreground)" }}>XP Earned</div>
+              <div style={{ fontWeight: 700, fontSize: 22, marginTop: 6 }}>{Number(score).toLocaleString()}</div>
+            </div>
+
+            <div
+              style={{
+                background: "rgba(99,102,241,0.06)",
+                padding: "var(--space-md)",
+                borderRadius: "10px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                minHeight: 96,
+              }}
+            >
+              <div style={{ fontSize: 12, color: "var(--muted-foreground)" }}>Max Combo</div>
+              <div style={{ fontWeight: 700, fontSize: 22, marginTop: 6 }}>x{combo}</div>
+            </div>
+
+            <div
+              style={{
+                background: "rgba(251,146,60,0.06)",
+                padding: "var(--space-md)",
+                borderRadius: "10px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                minHeight: 96,
+              }}
+            >
+              <div style={{ fontSize: 12, color: "var(--muted-foreground)" }}>Tokens Earned</div>
+              <div style={{ fontWeight: 700, fontSize: 22, marginTop: 6 }}>🎵 {tokensEarned}</div>
+            </div>
+          </div>
+
+          <p className="small muted" style={{ marginTop: 'var(--space-md)' }}>
+            You earned {Number(score).toLocaleString()} XP and {tokensEarned} Tokens!
           </p>
-        )}
-        <p>You earned {score} XP and {Math.floor(score / 100)} Tokens!</p>
-        <button onClick={startGame} className="btn primary" style={{ marginTop: 'var(--space-lg)' }}>Play Again</button>
-      </div>
+
+          <div style={{ borderTop: "1px solid rgba(0,0,0,0.06)", paddingTop: "var(--space-md)", display: "flex", gap: "var(--space-sm)", justifyContent: "center" }}>
+            <button
+              className="btn primary"
+              onClick={startGame}
+              style={{ minWidth: 140 }}
+            >
+              Play Again
+            </button>
+          </div>
+        </div>
+      </section>
     );
   }
 

@@ -55,7 +55,17 @@ export async function verifyGoogleIdToken(idToken){
 }
 
 export async function findUserByEmail(email){
-  const { rows } = await query('SELECT * FROM users WHERE LOWER(email) = LOWER($1)', [email])
+  const { rows } = await query(
+    `SELECT id, email, password_hash, name, avatar_url, provider,
+            first_name, last_name, phone, address_line1, city, zip_code, country,
+            profile_completed, created_at, updated_at, last_login,
+            password_reset_token, password_reset_expires_at,
+            COALESCE(points, 0) as points, 
+            COALESCE(tokens, 0) as tokens, 
+            COALESCE(login_streak, 0) as login_streak
+     FROM users WHERE LOWER(email) = LOWER($1)`, 
+    [email]
+  )
   return rows[0]
 }
 
@@ -64,13 +74,16 @@ export async function createUser({ email, name, password, avatar_url, provider }
   const { rows } = await query(
     `INSERT INTO users (email, password_hash, name, avatar_url, provider)
      VALUES ($1, $2, $3, $4, $5)
-     RETURNING id, email, name, avatar_url, provider, created_at, updated_at`,
+     RETURNING id, email, name, avatar_url, provider, 
+              COALESCE(points, 0) as points, 
+              COALESCE(tokens, 0) as tokens, 
+              COALESCE(login_streak, 0) as login_streak,
+              created_at, updated_at`,
      [email, password_hash, name, avatar_url, provider]
   )
   return rows[0]
 }
 
-<<<<<<< HEAD
 // auth.js  (replace the existing publicUser)
 export function publicUser(u){
   if(!u) return null
@@ -79,6 +92,7 @@ export function publicUser(u){
     first_name, last_name, phone,
     address_line1, city, zip_code, country,
     profile_completed,
+    points, tokens, login_streak,
     created_at, updated_at
   } = u
   return {
@@ -86,6 +100,7 @@ export function publicUser(u){
     first_name, last_name, phone,
     address_line1, city, zip_code, country,
     profile_completed,
+    points, tokens, login_streak,
     created_at, updated_at
   }
 }
@@ -138,11 +153,3 @@ export async function handleGoogleSignIn(req, res) {
     res.status(500).json({ message: 'Authentication failed due to a server error.' });
   }
 }
-=======
-export function publicUser(u){
-  if(!u) return null
-  const { id, email, name, avatar_url, provider, created_at, updated_at } = u
-  return { id, email, name, avatar_url, provider, created_at, updated_at }
-}
-
->>>>>>> 290fa6ca4b404c4517359c72053dc28160a053b4

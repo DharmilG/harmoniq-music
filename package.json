@@ -5,16 +5,16 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:client": "vite",
+    "dev:server": "npm run dev --prefix server",
+    "dev:all": "concurrently -n client,server -c green,cyan \"npm:dev\" \"npm:dev --prefix server\"",
     "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
     "@react-oauth/google": "^0.12.2",
-<<<<<<< HEAD
     "axios": "^1.13.1",
     "idb": "^8.0.3",
-=======
->>>>>>> 290fa6ca4b404c4517359c72053dc28160a053b4
     "react": "^18.3.1",
     "react-custom-roulette": "^1.4.1",
     "react-dom": "^18.3.1",
@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.1",
-    "vite": "^5.4.0"
+    "vite": "^5.4.0",
+    "concurrently": "^9.0.1"
   }
 }

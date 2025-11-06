@@ -18,15 +18,8 @@ const levels = [
 
 const instruments = [
     { id: 'piano', name: 'Piano', description: 'Basic 8 minor and 4 major keys.', unlockLevel: 1, path: '/learn/practice/piano/lobby' },
-<<<<<<< HEAD
-    { id: 'bass guitar', name: 'Guitar', description: 'Bass guitar with basic chords.', unlockLevel: 3, path: '/learn/practice/guitar/lobby' },
-]
-=======
-    { id: 'guitar', name: 'Guitar', description: 'Acoustic guitar with basic chords.', unlockLevel: 3, path: '#' },
-    { id: 'drums', name: 'Drum Kit', description: 'A simple drum kit for rhythm practice.', unlockLevel: 5, path: '#' },
-    { id: 'flute', name: 'Flute', description: 'Learn basic melodies on a flute.', unlockLevel: 7, path: '#' },
+    { id: 'guitar', name: 'Guitar', description: 'Acoustic guitar with basic chords.', unlockLevel: 3, path: '/learn/practice/guitar/lobby' },
 ];
->>>>>>> 290fa6ca4b404c4517359c72053dc28160a053b4
 
 function getUserLevel(points) {
     let currentLevel = levels[0];

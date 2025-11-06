@@ -17,8 +17,10 @@ BEGIN
   IF NOT EXISTS(SELECT 1 FROM information_schema.columns WHERE table_name='users' AND column_name='last_login') THEN
     ALTER TABLE users ADD COLUMN last_login TIMESTAMPTZ;
   END IF;
+  IF NOT EXISTS(SELECT 1 FROM information_schema.columns WHERE table_name='users' AND column_name='login_streak') THEN
+    ALTER TABLE users ADD COLUMN login_streak INTEGER DEFAULT 0;
+  END IF;
 END $$;
-<<<<<<< HEAD
 -- ==== PROFILE COLUMNS (run once) ====
 DO $$
 BEGIN
@@ -47,8 +49,6 @@ BEGIN
     ALTER TABLE users ADD COLUMN profile_completed INTEGER DEFAULT 0;
   END IF;
 END $$;
-=======
->>>>>>> 290fa6ca4b404c4517359c72053dc28160a053b4
 
 -- Users table
 CREATE TABLE IF NOT EXISTS users (
@@ -161,7 +161,6 @@ CREATE TABLE IF NOT EXISTS user_activity_log (
     points_earned INTEGER,
     tokens_earned NUMERIC(10, 2),
     created_at TIMESTAMPTZ DEFAULT NOW()
-<<<<<<< HEAD
 );
 
 -- Order processing tables
@@ -234,6 +233,4 @@ ON CONFLICT (email) DO UPDATE SET
   points = EXCLUDED.points,
   avatar_url = EXCLUDED.avatar_url,
   profile_completed = EXCLUDED.profile_completed;
-=======
 );
->>>>>>> 290fa6ca4b404c4517359c72053dc28160a053b4

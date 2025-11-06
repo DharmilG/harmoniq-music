@@ -4,8 +4,8 @@ import { useAuth } from '../context/AuthContext.jsx';
 import { api } from '../context/apiClient.js';
 
 const rankedGuitarGames = [
-    { id: 'chord-progression', name: 'Chord Progression Challenge', description: 'Follow the chord sequence and play them in time.', path: '/learn/practice/guitar/ranked/chord-progression', comingSoon: false },
-    { id: 'rhythm-master', name: 'Rhythm Master', description: 'Strum along to complex rhythms to prove your timing.', path: '/learn/practice/guitar/ranked/rhythm-master', comingSoon: false, unlockId: 'game_rhythm_master', price: 300 },
+    { id: 'chord-progression', name: 'Chord Progression Challenge', description: 'Follow the chord sequence and play them in time.', path: '/learn/practice/guitar/ranked/chord-progression', gameType: 'chord_challenge_game', comingSoon: false },
+    { id: 'rhythm-master', name: 'Rhythm Master', description: 'Strum along to complex rhythms to prove your timing.', path: '/learn/practice/guitar/ranked/rhythm-master', gameType: 'rhythm_master_game', comingSoon: false, unlockId: 'game_rhythm_master', price: 300 },
 ];
 
 export default function RankedGuitarGameSelection() {
@@ -38,21 +38,29 @@ export default function RankedGuitarGameSelection() {
                                     {isLocked && <span className="badge small" style={{ marginLeft: 'auto' }}>🔒 {game.price} Tokens</span>}
                                 </h3>
                                 <p className="small muted" style={{ flexGrow: 1 }}>{game.description}</p>
-                                {isDisabled ? (
-                                    isLocked ? (
-                                        <Link to="/rewards" className="btn" style={{ marginTop: 'auto' }}>Unlock in Store</Link>
+                                <div style={{ display: 'flex', gap: 'var(--space-sm)', marginTop: 'auto' }}>
+                                    {isDisabled ? (
+                                        isLocked ? (
+                                            <Link to="/rewards" className="btn" style={{ flex: 1 }}>Unlock in Store</Link>
+                                        ) : (
+                                            <button className="btn" disabled style={{ flex: 1 }}>Play</button>
+                                        )
                                     ) : (
-                                    <button className="btn" disabled>Play</button>
-                                    )
-                                ) : (
-                                    <Link to={game.path} className="btn primary">Play</Link>
-                                )}
+                                        <Link to={game.path} className="btn primary" style={{ flex: 1 }}>Play</Link>
+                                    )}
+                                    {game.gameType && (
+                                        <Link to={`/leaderboard/${game.gameType}`} className="btn" style={{ flex: 1 }}>
+                                            🏆 Leaderboard
+                                        </Link>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     )})}
                 </div>
-                <div className="actions" style={{ justifyContent: 'center', marginTop: 'var(--space-xl)' }}>
+                <div className="actions" style={{ justifyContent: 'center', marginTop: 'var(--space-xl)', gap: 'var(--space-md)' }}>
                     <Link to="/learn/practice/guitar/lobby" className="btn">Back to Lobby</Link>
+                    <Link to="/leaderboard" className="btn">View Global Leaderboard</Link>
                 </div>
             </div>
         </section>

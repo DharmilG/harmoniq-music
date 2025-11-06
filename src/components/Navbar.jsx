@@ -1,19 +1,13 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext.jsx'
 import logo from '../assets/logo.png'
-<<<<<<< HEAD
-=======
 
->>>>>>> 290fa6ca4b404c4517359c72053dc28160a053b4
 export default function Navbar(){
   const { isAuthenticated, user, logout } = useAuth()
   const navigate = useNavigate()
 
   const handleLoginClick = () => navigate('/login')
-<<<<<<< HEAD
-=======
   const handleLogout = () => { logout(); navigate('/') }
->>>>>>> 290fa6ca4b404c4517359c72053dc28160a053b4
   const handleAccount = () => navigate('/account')
 
   return (
@@ -48,10 +42,6 @@ export default function Navbar(){
                   />
                   {user?.name?.split(' ')[0] || 'Account'}
                 </button>
-<<<<<<< HEAD
-=======
-                <button className="cta" onClick={handleLogout}>Logout</button>
->>>>>>> 290fa6ca4b404c4517359c72053dc28160a053b4
               </div>
             )}
           </div>
