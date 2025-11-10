@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import * as Tone from 'tone';
-import './piano.css';
 
 const keyMap = {
     // Bottom row
