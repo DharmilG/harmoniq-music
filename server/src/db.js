@@ -5,14 +5,18 @@ import { fileURLToPath } from 'url'
 dotenv.config({ path: fileURLToPath(new URL('../.env', import.meta.url)) })
 const { Pool } = pg
 
-export const pool = new Pool({
-  host: process.env.PGHOST,
-  port: Number(process.env.PGPORT || 5432),
-  database: process.env.PGDATABASE,
-  user: process.env.PGUSER,
-  password: process.env.PGPASSWORD,
-  ssl: process.env.PGSSL === 'true' ? { rejectUnauthorized: false } : false,
-})
+const isProduction = process.env.NODE_ENV === 'production'
+
+const connectionConfig = isProduction
+  ? {
+      connectionString: process.env.DATABASE_URL,
+      ssl: {
+        rejectUnauthorized: false,
+      },
+    }
+  : {} // For local dev, pg will automatically use PGHOST, PGUSER, etc. from .env
+
+export const pool = new Pool(connectionConfig)
 
 export async function query(text, params){
   console.log('query:', text, params)
